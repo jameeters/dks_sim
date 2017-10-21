@@ -15,10 +15,14 @@ class Names(Enum):
 # CONFIG VARS
 H_END = 1  # The number of hours for which the simulation should be run
 LAM_ENTRY = 0.04614800359813854
+BUFFER = 0.25
 
 # NON-CONFIG CONSTANTS
 T_0 = 0  # a datetime for the start of the simulation
 T_END = H_END * 3600  # the number of seconds for which the
+T_BUFFER = round(T_END + (T_END * BUFFER))
+print(T_BUFFER)
+
 
 # IMPORTANT MUTABLE VALUES
 t = 0  # the number of seconds since T_0 currently being simulated
@@ -38,11 +42,14 @@ for customer in door.walkin():
     dest.line.push(customer)
     customer.choice = dest.name
 
-while t <= T_END:
+while t <= T_BUFFER:
     try:
         t = min([i for i in [register.serve(t), *[ss.serve(t) for ss in stations]] if i > 0])
+        # t = min(register.serve(t), *[ss.serve(t) for ss in stations])
     except ValueError:
         t += 1
 
     print([register.free, *[ss.free for ss in stations]])
     print(t)
+
+

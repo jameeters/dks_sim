@@ -36,7 +36,7 @@ class ServiceStation:
 
     def serve(self, t):
         # check that the last customer has been served
-        if self.free <= t:
+        if (not self.line.empty()) and self.free <= t:
             # free will be the finishing time of serving: if it is past, move serving to the next line.
             if self.serving is not None:
                 self.nxt.line.push(self.serving)
@@ -52,8 +52,4 @@ class ServiceStation:
                 self.free = t + round(np.random.normal(loc=self.mu, scale=self.sigma))
                 cust.t_serv_end = self.free
                 self.serving = cust
-
-        return self.free
-
-
-
+        return max(self.free, self.line.head().tin_door)

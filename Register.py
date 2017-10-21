@@ -14,7 +14,7 @@ class Register:
 
     def serve(self, t):
         # check that the last customer has been served
-        if (not self.line.empty()) and (self.free <= t):
+        if (not self.line.empty()) and self.free <= t:
             # free will be the finishing time of serving, if it is past, serving can leave.
             if self.serving is not None:
                 self.nxt.append(self.serving)
@@ -30,8 +30,4 @@ class Register:
                 self.free = t + round(np.random.normal(loc=self.mu, scale=self.sigma))
                 cust.tout_door = self.free
                 self.serving = cust
-
         return self.free
-
-
-
