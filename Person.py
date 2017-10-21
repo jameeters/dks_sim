@@ -1,14 +1,21 @@
 
 class Person:
-    def __init__(self):
-        self.wait_times  = []
+
+    def __init__(self, tin):
+        self.wait_times = []
         self.status = None
 
-    def start_wait(self, name, t):
-        self.status = {'location': 'name', 'tin': t, 'tout': None}
+        self.tin_door = tin
+        self.tout_door = None
 
-    def end_wait(self, t):
-        self.status['tout'] = t
-        self.status['elapsed'] = t - self.status['tin']
-        self.wait_times.append(self.status)
-        self.status = None
+        self.choice = None
+
+        self.t_serv_start = None
+        self.t_serv_end = None
+
+        self.t_co_start = None
+
+
+    def total_time(self):
+        return self.tin_door
+
