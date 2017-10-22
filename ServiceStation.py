@@ -52,4 +52,13 @@ class ServiceStation:
                 self.free = t + round(np.random.normal(loc=self.mu, scale=self.sigma))
                 cust.t_serv_end = self.free
                 self.serving = cust
-        return max(self.free, self.line.head().tin_door)
+
+        # If the line is empty, this station can skip until the end of days
+        if self.line.empty():
+            next_cust_time = float('inf')
+        # If the line is not empty, it may be able to skip to the next customer
+        else:
+            next_cust_time = self.line.head().tin_door
+        # Because we can skip to whichever of these is further away, as far as this station is concerned
+        # Either the next time it can serve a customer or the next time it has one
+        return max(self.free, next_cust_time)

@@ -10,9 +10,9 @@ class Door:
         # Create a person object for each entry, with a tin_door randomly chosen within the interval.
         self.entries = []
         for i, v in enumerate(self.vals):
-            intv_start = i * 10
+            intv_start = i
             for e in range(v):
-                self.entries.append(Person(intv_start + np.random.randint(0, 10)))
+                self.entries.append(Person(intv_start))
 
     def walkin(self):
         for person in self.entries:

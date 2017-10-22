@@ -30,4 +30,10 @@ class Register:
                 self.free = t + round(np.random.normal(loc=self.mu, scale=self.sigma))
                 cust.tout_door = self.free
                 self.serving = cust
-        return self.free
+
+        if self.line.empty():
+            next_cust_time = float('inf')
+        else:
+            next_cust_time = self.line.head().t_serv_end
+
+        return max(self.free, next_cust_time)
