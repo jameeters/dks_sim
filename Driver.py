@@ -7,7 +7,8 @@ from Analysis import *
 
 # CONFIG VARS
 H_END = 0.5  # The number of hours for which the simulation should be run
-LAM_ENTRY = 0.04614800359813854
+# LAM_ENTRY = 0.04614800359813854
+LAM_ENTRY = 0.05
 
 # NON-CONFIG CONSTANTS
 T_0 = 0  # a datetime for the start of the simulation
@@ -22,10 +23,10 @@ per_iteration = []
 for i in range(SIM_ITERATIONS):
     t = 0
     done = []
-    register = Register(Names.register, 15, 9, done)
+    register = Register(Names.register, 30, 13, done)
     stations = [
         ServiceStation(Names.sandwich, 298, 68, 0.2, nxt=register),
-        ServiceStation(Names.wrap, 74, 18, 0.4, nxt=register),
+        ServiceStation(Names.wrap, 74 / 2, 18, 0.4, nxt=register),
         ServiceStation(Names.gandg, 5, 1, 0.4, nxt=register),
     ]
     door = Door(LAM_ENTRY, T_END)
@@ -43,7 +44,7 @@ for i in range(SIM_ITERATIONS):
         else:
             t = min(next_times)
 
-    alldone = [*alldone, *done]
+    alldone.extend(done)
     per_iteration.append(done)
 
 print('SIM DONE: {} ITERATIONS'.format(SIM_ITERATIONS))

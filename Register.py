@@ -19,6 +19,7 @@ class Register:
             # free will be the finishing time of serving, if it is past, serving can leave.
             if self.serving is not None:
                 self.nxt.append(self.serving)
+                self.serving = None
 
             if self.line.head().tin_door <= t:
                 # take the next customer from the head of the line
@@ -28,7 +29,7 @@ class Register:
 
                 # calculate the time to serve this customer
                 # I don't care to be accurate beyond the nearest second
-                if len(self.line) > 12:
+                if len(self.line) > 25:
                     self.free = t + abs(round(np.random.normal(loc=self.mu / 2, scale=self.sigma)))
                 else:
                     self.free = t + abs(round(np.random.normal(loc=self.mu, scale=self.sigma)))

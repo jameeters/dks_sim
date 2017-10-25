@@ -75,10 +75,10 @@ def line_lengths(per_iteration):
         Names.wrap: [],
         Names.gandg: []
     }
-    delta_t = 60
+    delta_t = 1
     t = 0
     for done in per_iteration:
-        t = 0
+        t = 10
         i = 0
         while True:
             for d in done:
@@ -113,7 +113,7 @@ def line_lengths(per_iteration):
     linename = 'line length for {}'
     time = list(range(0, (maxlen * delta_t), delta_t))
 
-    time = [t / delta_t for t in time]
+    time = [t / 60 for t in time]
 
     sns.tsplot(lengths[Names.register], value=linename.format(Names.register.value),
                time=time, ax=axes[0, 0], color='b')

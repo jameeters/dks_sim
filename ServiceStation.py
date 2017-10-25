@@ -43,6 +43,7 @@ class ServiceStation:
             # free will be the finishing time of serving: if it is past, move serving to the next line.
             if self.serving is not None:
                 self.nxt.line.push(self.serving)
+                self.serving = None
 
             if self.line.head().tin_door <= t:
                 # take the next customer from the head of the line
