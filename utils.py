@@ -21,6 +21,6 @@ def print_total_time_stats(data):
     times = []
     for p in data:
         times.append(p.total_time() / 60)
-    print(np.mean(times) / 60)
+    print(np.mean(times))
     print(np.std(times))
     print(min(times), max(times))

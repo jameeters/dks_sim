@@ -1,3 +1,4 @@
+import math
 import seaborn as sns
 import matplotlib.pyplot as plt
 from utils import Names, SIM_ITERATIONS
@@ -13,10 +14,11 @@ def count_choices(done):
     print(len(done) / SIM_ITERATIONS)
 
 
+RUG = False
+HIST = True
+MIN = True
+
 def total_times(done):
-    RUG = True
-    HIST = True
-    MIN = True
     sns.set(style="white", palette="muted", color_codes=True)
     # Set up the matplotlib figure
     f, axes = plt.subplots(2, 2, figsize=(7, 7), sharex='none')
@@ -42,9 +44,6 @@ def total_times(done):
 
 
 def line_times(done):
-    RUG = True
-    HIST = True
-    MIN = True
     sns.set(style="white", palette="muted", color_codes=True)
     # Set up the matplotlib figure
     f, axes = plt.subplots(2, 2, figsize=(7, 7), sharex='none')
@@ -76,7 +75,7 @@ def line_lengths(per_iteration):
         Names.wrap: [],
         Names.gandg: []
     }
-    delta_t = 1
+    delta_t = 60
     t = 0
     for done in per_iteration:
         t = 0
@@ -112,8 +111,9 @@ def line_lengths(per_iteration):
     sns.despine(left=True)
 
     linename = 'line length for {}'
-    time = list(range(0, maxlen * delta_t, delta_t))
-    time = [t for t in time]
+    time = list(range(0, (maxlen * delta_t), delta_t))
+
+    time = [t / delta_t for t in time]
 
     sns.tsplot(lengths[Names.register], value=linename.format(Names.register.value),
                time=time, ax=axes[0, 0], color='b')
@@ -126,7 +126,6 @@ def line_lengths(per_iteration):
 
     sns.tsplot(lengths[Names.gandg], value=linename.format(Names.gandg.value),
                time=time, ax=axes[1, 1], color='m')
-
 
     plt.setp(axes)
     plt.subplots_adjust(top=1.3)

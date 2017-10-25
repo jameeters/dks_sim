@@ -22,6 +22,9 @@ class Line:
     def empty(self):
         return len(self.line) == 0
 
+    def __len__(self):
+        return len(self.line)
+
 
 class ServiceStation:
     def __init__(self, name, mu, sigma, p, nxt=None):

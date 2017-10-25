@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from ServiceStation import Line
 
 
@@ -27,7 +28,10 @@ class Register:
 
                 # calculate the time to serve this customer
                 # I don't care to be accurate beyond the nearest second
-                self.free = t + abs(round(np.random.normal(loc=self.mu, scale=self.sigma)))
+                if len(self.line) > 12:
+                    self.free = t + abs(round(np.random.normal(loc=self.mu / 2, scale=self.sigma)))
+                else:
+                    self.free = t + abs(round(np.random.normal(loc=self.mu, scale=self.sigma)))
                 cust.tout_door = self.free
                 self.serving = cust
 

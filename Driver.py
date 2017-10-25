@@ -18,21 +18,15 @@ t = 0  # the number of seconds since T_0 currently being simulated
 
 alldone = []
 per_iteration = []
-# stations = [
-#     ServiceStation(Names.sandwich, 298, 68, 0.3558080808, nxt=register),
-#     ServiceStation(Names.wrap, 74, 18, 0.2962121212, nxt=register),
-#     ServiceStation(Names.gandg, 10, 3, 0.347979798, nxt=register),
-# ]
-
 
 for i in range(SIM_ITERATIONS):
     t = 0
     done = []
-    register = Register(Names.register, 16, 14, done)
+    register = Register(Names.register, 15, 9, done)
     stations = [
         ServiceStation(Names.sandwich, 298, 68, 0.2, nxt=register),
         ServiceStation(Names.wrap, 74, 18, 0.4, nxt=register),
-        ServiceStation(Names.gandg, 5, 0.001, 0.4, nxt=register),
+        ServiceStation(Names.gandg, 5, 1, 0.4, nxt=register),
     ]
     door = Door(LAM_ENTRY, T_END)
     for customer in door.walkin():
@@ -52,7 +46,7 @@ for i in range(SIM_ITERATIONS):
     alldone = [*alldone, *done]
     per_iteration.append(done)
 
-print('SIM DONE')
+print('SIM DONE: {} ITERATIONS'.format(SIM_ITERATIONS))
 count_choices(alldone)
 
 print('-' * 30)
@@ -74,10 +68,11 @@ print_total_time_stats([d for d in alldone if d.choice == Names.gandg])
 print('-' * 30)
 
 c = input('continue (y/n): ')
-if not c.lower().strip() == 'y' or 'yes':
+if not c.lower().strip() in ['y', 'yes']:
     exit(0)
 
 total_times(alldone)
 line_times(alldone)
 line_lengths(per_iteration)
+
 
