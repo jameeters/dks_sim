@@ -2,13 +2,12 @@ import numpy as np
 from Door import Door
 from ServiceStation import ServiceStation
 from Register import Register
-from utils import rvec, Names
+from utils import *
 from Analysis import *
 
 # CONFIG VARS
 H_END = 0.5  # The number of hours for which the simulation should be run
 LAM_ENTRY = 0.04614800359813854
-SIM_ITERATIONS = 1
 
 # NON-CONFIG CONSTANTS
 T_0 = 0  # a datetime for the start of the simulation
@@ -18,6 +17,7 @@ T_END = round(H_END * 3600)  # the number of seconds for which the
 t = 0  # the number of seconds since T_0 currently being simulated
 
 alldone = []
+per_iteration = []
 # stations = [
 #     ServiceStation(Names.sandwich, 298, 68, 0.3558080808, nxt=register),
 #     ServiceStation(Names.wrap, 74, 18, 0.2962121212, nxt=register),
@@ -32,7 +32,7 @@ for i in range(SIM_ITERATIONS):
     stations = [
         ServiceStation(Names.sandwich, 298, 68, 0.2, nxt=register),
         ServiceStation(Names.wrap, 74, 18, 0.4, nxt=register),
-        ServiceStation(Names.gandg, 5, 1, 0.4, nxt=register),
+        ServiceStation(Names.gandg, 5, 0.001, 0.4, nxt=register),
     ]
     door = Door(LAM_ENTRY, T_END)
     for customer in door.walkin():
@@ -50,49 +50,34 @@ for i in range(SIM_ITERATIONS):
             t = min(next_times)
 
     alldone = [*alldone, *done]
+    per_iteration.append(done)
+
 print('SIM DONE')
 count_choices(alldone)
-# print('-' * 30)
-# print('total')
-# times = []
-# for p in done:
-#     times.append(p.total_time() / 60)
-# print(np.mean(times) / 60)
-# print(np.median(times) / 60)
-# print(min(times), max(times))
-# print('-' * 30)
-#
-# print(Names.sandwich.value)
-# times = []
-# for p in [d for d in done if d.choice == Names.sandwich]:
-#     times.append(p.serv_time() / 60)
-# print(np.mean(times))
-# print(np.median(times))
-# print(min(times), max(times))
-# print('-' * 30)
-#
-# print(Names.wrap.value)
-# times = []
-# for p in [d for d in done if d.choice == Names.wrap]:
-#     times.append(p.serv_time() / 60)
-# print(np.mean(times))
-# print(np.median(times))
-# print(min(times), max(times))
-# print('-' * 30)
-#
-# print(Names.gandg.value)
-# times = []
-# for p in [d for d in done if d.choice == Names.gandg]:
-#     times.append(p.serv_time() / 60)
-# print(np.mean(times))
-# print(np.median(times))
-# print(min(times), max(times))
-# print('-' * 30)
-#
-# print(rvec([i.total_time() for i in done]))
-# print('*' * 70)
-# print(rvec([i.food_line_time() for i in done if i.choice == Names.sandwich]))
 
-# total_times(done)
-# line_times(done)
-line_lengths(done)
+print('-' * 30)
+print('total')
+print_total_time_stats(alldone)
+print('-' * 30)
+
+print(Names.sandwich.value)
+print_total_time_stats([d for d in alldone if d.choice == Names.sandwich])
+print('-' * 30)
+
+print(Names.wrap.value)
+
+print_total_time_stats([d for d in alldone if d.choice == Names.wrap])
+print('-' * 30)
+
+print(Names.gandg.value)
+print_total_time_stats([d for d in alldone if d.choice == Names.gandg])
+print('-' * 30)
+
+c = input('continue (y/n): ')
+if not c.lower().strip() == 'y' or 'yes':
+    exit(0)
+
+total_times(alldone)
+line_times(alldone)
+line_lengths(per_iteration)
+

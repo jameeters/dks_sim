@@ -1,7 +1,16 @@
-import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from utils import Names
+from utils import Names, SIM_ITERATIONS
+
+
+def count_choices(done):
+    choices = {Names.sandwich: 0, Names.wrap: 0, Names.gandg: 0, Names.register: 0}
+    for d in done:
+        choices[d.choice] += 1
+
+    pchoices = {k.value: choices[k] / SIM_ITERATIONS for k in list(choices.keys())}
+    print(pchoices)
+    print(len(done) / SIM_ITERATIONS)
 
 
 def total_times(done):
@@ -60,38 +69,42 @@ def line_times(done):
     plt.show()
 
 
-def count_choices(done):
-    choices = {Names.sandwich: 0, Names.wrap: 0, Names.gandg: 0, Names.register: 0}
-    for d in done:
-        choices[d.choice] += 1
-
-    pchoices = {k.value: choices[k] for k in list(choices.keys())}
-    print(pchoices)
-
-
-def line_lengths(done):
+def line_lengths(per_iteration):
     lengths = {
         Names.register: [],
         Names.sandwich: [],
         Names.wrap: [],
         Names.gandg: []
     }
-
     delta_t = 1
     t = 0
-    i = 0
-    while True:
-        for l in lengths.values():
-            l.append(0)
-        for d in done:
-            if d.tin_door <= t < d.t_serv_start:
-                lengths[d.choice][i] += 1
-            if d.t_serv_end <= t < d.t_co_start:
-                lengths[Names.register][i] += 1
-        if not max([l[i] > 0 for l in lengths.values()]) and t - delta_t > done[-1].tout_door:
-            break
-        t += delta_t
-        i += 1
+    for done in per_iteration:
+        t = 0
+        i = 0
+        while True:
+            for d in done:
+                if d.tin_door <= t < d.t_serv_start:
+                    try:
+                        lengths[d.choice][i] += 1
+                    except IndexError:
+                        lengths[d.choice].append(1)
+                if d.t_serv_end <= t < d.t_co_start:
+                    try:
+                        lengths[Names.register][i] += 1
+                    except IndexError:
+                        lengths[Names.register].append(1)
+            if t - delta_t > done[-1].tout_door:
+                break
+            t += delta_t
+            i += 1
+
+    maxlen = max([len(l) for l in lengths.values()])
+    for l in lengths.values():
+        l.extend([0]*(maxlen - len(l)))
+
+    for l in lengths.values():
+        for i, d in enumerate(l):
+            l[i] = round(d / len(per_iteration))
 
     sns.set(style="white", palette="muted", color_codes=True)
     # Set up the matplotlib figure
@@ -99,7 +112,8 @@ def line_lengths(done):
     sns.despine(left=True)
 
     linename = 'line length for {}'
-    time = list(range(0, t + 1, delta_t))
+    time = list(range(0, maxlen * delta_t, delta_t))
+    time = [t for t in time]
 
     sns.tsplot(lengths[Names.register], value=linename.format(Names.register.value),
                time=time, ax=axes[0, 0], color='b')

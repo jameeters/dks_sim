@@ -49,7 +49,7 @@ class ServiceStation:
 
                 # calculate the time to serve this customer
                 # I don't care to be accurate beyond the nearest second
-                self.free = t + round(np.random.normal(loc=self.mu, scale=self.sigma))
+                self.free = t + abs(round(np.random.normal(loc=self.mu, scale=self.sigma)))
                 cust.t_serv_end = self.free
                 self.serving = cust
 
