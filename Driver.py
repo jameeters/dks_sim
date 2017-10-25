@@ -3,12 +3,12 @@ from Door import Door
 from ServiceStation import ServiceStation
 from Register import Register
 from utils import rvec, Names
-from Analysis import total_times, line_times, count_choices
+from Analysis import *
 
 # CONFIG VARS
 H_END = 0.5  # The number of hours for which the simulation should be run
 LAM_ENTRY = 0.04614800359813854
-SIM_ITERATIONS = 10
+SIM_ITERATIONS = 1
 
 # NON-CONFIG CONSTANTS
 T_0 = 0  # a datetime for the start of the simulation
@@ -93,5 +93,6 @@ count_choices(alldone)
 # print('*' * 70)
 # print(rvec([i.food_line_time() for i in done if i.choice == Names.sandwich]))
 
-total_times(done)
-line_times(done)
+# total_times(done)
+# line_times(done)
+line_lengths(done)
