@@ -23,10 +23,10 @@ per_iteration = []
 for i in range(SIM_ITERATIONS):
     t = 0
     done = []
-    register = Register(Names.register, 30, 13, done)
+    register = Register(Names.register, 16, 14, done)
     stations = [
         ServiceStation(Names.sandwich, 298, 68, 0.2, nxt=register),
-        ServiceStation(Names.wrap, 74 / 2, 18, 0.4, nxt=register),
+        ServiceStation(Names.wrap, 74, 18, 0.4, nxt=register),
         ServiceStation(Names.gandg, 5, 1, 0.4, nxt=register),
     ]
     door = Door(LAM_ENTRY, T_END)
